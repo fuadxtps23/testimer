@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server-Side Timer</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #timer {
+            font-size: 3em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="timer">Loading...</div>
+
+<script>
+    // Fetch server time when the page loads
+    fetch('server_time.php')
+        .then(response => response.json())
+        .then(data => {
+            const startTime = new Date(data.serverTime);
+            setInterval(() => {
+                const now = new Date();
+                const elapsedTime = now - startTime;
+
+                const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+
+                document.getElementById('timer').textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }, 1000);
+        });
+</script>
+
+</body>
+</html>
